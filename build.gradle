@@ -1,0 +1,33 @@
+buildscript {
+    ext {
+        springBootVersion = '2.7.17'
+        dependencyManagementVersion = '1.1.3'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'io.spring.dependency-management' version "${dependencyManagementVersion}"
+}
+
+java {
+    sourceCompatibility = '11'
+}
+
+group = 'org.flow.assignment'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation ('org.springframework.boot:spring-boot-starter-web')
+    testImplementation ('org.springframework.boot:spring-boot-starter-test')
+
+}
+
+test {
+    useJUnitPlatform()
+}
