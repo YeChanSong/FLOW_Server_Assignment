@@ -1,17 +1,17 @@
 package org.flow.assignment.service;
 
 import org.flow.assignment.configuration.InitDataSetting;
+import org.flow.assignment.dto.ExtensionWithStateDto;
 import org.flow.assignment.entity.ExtensionFilter;
 import org.flow.assignment.repository.ExtensionFilterRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.UnexpectedRollbackException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,7 +25,7 @@ public class ExtensionFilterServiceTest {
     @Autowired
     ExtensionFilterRepository filterRepository;
 
-    @Autowired
+    @MockBean
     InitDataSetting initSetting;
 
     @AfterEach
@@ -72,19 +72,18 @@ public class ExtensionFilterServiceTest {
     public void 확장자_조회된다() {
 
         // given
-        if(filterService.getFixedExtensions().isEmpty()) initSetting.run(null);
-        List<String> fixedExtensions = new ArrayList<>(Arrays.asList("bat", "cmd", "com", "cpl", "exe", "scr", "js"));
-        String ext1 = "extension1", ext2 = "extension2";
+        String ext1 = "extension1", ext2 = "extension2", fixedExt = "bat";
+        filterRepository.save(ExtensionFilter.builder().isFixed(true).isActivate(true).extension(fixedExt).build());
 
         // when
         filterService.addExtensionFilter(ext1);
         filterService.addExtensionFilter(ext2);
 
         //then
-        List<String> fixedExts = filterService.getFixedExtensions();
+        List<ExtensionWithStateDto> fixedExts = filterService.getFixedExtensions();
         List<String> customExts = filterService.getCustomExtensions();
 
-        assertThat(fixedExts.size()).isEqualTo(fixedExtensions.size());
+        assertThat(fixedExts.size()).isEqualTo(1);
         assertThat(customExts.size()).isEqualTo(2);
     }
 

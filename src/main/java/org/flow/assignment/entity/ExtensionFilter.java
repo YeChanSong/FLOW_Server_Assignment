@@ -3,6 +3,7 @@ package org.flow.assignment.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.flow.assignment.dto.ExtensionWithStateDto;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -34,5 +35,13 @@ public class ExtensionFilter {
         this.isActivate = isActivate;
         this.extension = extension;
         this.createdAt = LocalDateTime.now();
+    }
+
+    public ExtensionWithStateDto toExtensionWithState() {
+        return ExtensionWithStateDto.builder().ext(this.extension).isActivate(this.isActivate).build();
+    }
+
+    public void update(Boolean isActivate) {
+        this.isActivate = isActivate;
     }
 }
