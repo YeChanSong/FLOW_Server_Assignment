@@ -1,5 +1,6 @@
 package org.flow.assignment.service;
 
+import org.flow.assignment.configuration.InitDataSetting;
 import org.flow.assignment.entity.ExtensionFilter;
 import org.flow.assignment.repository.ExtensionFilterRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -23,6 +24,9 @@ public class ExtensionFilterServiceTest {
 
     @Autowired
     ExtensionFilterRepository filterRepository;
+
+    @Autowired
+    InitDataSetting initSetting;
 
     @AfterEach
     public void tearDown() {
@@ -68,6 +72,7 @@ public class ExtensionFilterServiceTest {
     public void 확장자_조회된다() {
 
         // given
+        if(filterService.getFixedExtensions().isEmpty()) initSetting.run(null);
         List<String> fixedExtensions = new ArrayList<>(Arrays.asList("bat", "cmd", "com", "cpl", "exe", "scr", "js"));
         String ext1 = "extension1", ext2 = "extension2";
 
