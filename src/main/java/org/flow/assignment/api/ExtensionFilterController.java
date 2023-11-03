@@ -26,9 +26,10 @@ public class ExtensionFilterController {
     ) {
         String message = "정상 처리되었습니다.";
         try {
-            if (!requestDto.getExtension().isEmpty())
-                filterService.addExtensionFilter(requestDto.getExtension());
-            else message = "확장자를 입력해 주세요.";
+            if (requestDto.getExtension().isEmpty()) message = "확장자를 입력해 주세요.";
+            else if (!filterService.addExtensionFilter(requestDto.getExtension())) {
+                message = "커스텀 확장자의 수가 200을 넘었습니다.";
+            }
         } catch (UnexpectedRollbackException | DataIntegrityViolationException e) {
             message = "중복 저장된 확장자입니다.";
         }

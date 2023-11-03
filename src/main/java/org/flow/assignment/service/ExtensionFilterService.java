@@ -17,8 +17,14 @@ public class ExtensionFilterService {
     private final ExtensionFilterRepository filterRepository;
 
     @Transactional
-    public void addExtensionFilter(String extension) {
-        filterRepository.save(ExtensionFilter.builder().isFixed(false).isActivate(true).extension(extension).build());
+    public boolean addExtensionFilter(String extension) {
+        boolean isAddSuccess = false;
+        List<ExtensionFilter> customFilters = filterRepository.findAllExtensionsByIsFixedExtensionAndIsActivateOrderById(false, true);
+        if (customFilters.size() < 200) {
+            filterRepository.save(ExtensionFilter.builder().isFixed(false).isActivate(true).extension(extension).build());
+            isAddSuccess = true;
+        }
+        return isAddSuccess;
     }
 
     @Transactional
