@@ -74,6 +74,40 @@ public class ExtensionFilterRepositoryTest {
 
     }
 
+    @Test
+    public void Extension_중복_저장_방지된다() {
 
+        // given
+        String duplicateFixedExt = "bat";
+        String duplicateCustomExt = "extension";
+
+        filterRepository.save(ExtensionFilter.builder().isFixed(true).extension(duplicateFixedExt).isActivate(true).build());
+        filterRepository.save(ExtensionFilter.builder().isFixed(false).extension(duplicateCustomExt).isActivate(true).build());
+
+        try {
+            // when
+            filterRepository.save(ExtensionFilter.builder().isFixed(true).extension(duplicateFixedExt).isActivate(true).build());
+        } catch (Exception e) {
+            // then
+            assertThat(e.getClass().getName()).isEqualTo("org.springframework.dao.DataIntegrityViolationException");
+        }
+
+        try {
+            // when
+            filterRepository.save(ExtensionFilter.builder().isFixed(false).extension(duplicateCustomExt).isActivate(true).build());
+        } catch (Exception e) {
+            // then
+            assertThat(e.getClass().getName()).isEqualTo("org.springframework.dao.DataIntegrityViolationException");
+        }
+
+        // when
+        List<Long> fixedExts = filterRepository.findAllByExtensionOrderById(duplicateFixedExt).stream().map(ExtensionFilter::getId).collect(Collectors.toList());
+        List<Long> customExts = filterRepository.findAllByExtensionOrderById(duplicateCustomExt).stream().map(ExtensionFilter::getId).collect(Collectors.toList());
+
+        // then
+        assertThat(fixedExts.size()).isEqualTo(1);
+        assertThat(customExts.size()).isEqualTo(1);
+
+    }
     
 }
