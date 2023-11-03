@@ -19,15 +19,19 @@ public class ExtensionFilter {
     @Column(nullable = false)
     private Boolean isFixedExtension;
 
-    @Column(length = 20, nullable = false)
+    @Column(nullable = false)
+    private Boolean isActivate;
+
+    @Column(length = 20, nullable = false, unique = true)
     private String extension;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
 
     @Builder
-    public ExtensionFilter(Boolean isFixed, String extension) {
+    public ExtensionFilter(Boolean isFixed, Boolean isActivate, String extension) {
         this.isFixedExtension = isFixed;
+        this.isActivate = isActivate;
         this.extension = extension;
         this.createdAt = LocalDateTime.now();
     }
