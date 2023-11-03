@@ -9,14 +9,15 @@ import java.util.*;
 @Getter
 @NoArgsConstructor
 public class ExtensionFilterResponseDto {
-    private List<String> fixedExtensions;
+    private List<ExtensionWithStateDto> fixedExtensions;
     private List<String> customExtensions;
     private String message;
     @Builder
-    public ExtensionFilterResponseDto(List<String> fixed, List<String> custom, String message) {
+    public ExtensionFilterResponseDto(List<ExtensionWithStateDto> fixed, List<String> custom, String message) {
         this.fixedExtensions = fixed;
         this.customExtensions = custom;
         this.message = message;
     }
 
 }
+
