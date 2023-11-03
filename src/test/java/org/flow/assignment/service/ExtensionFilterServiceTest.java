@@ -72,19 +72,18 @@ public class ExtensionFilterServiceTest {
     public void 확장자_조회된다() {
 
         // given
-        if(filterService.getFixedExtensions().isEmpty()) initSetting.run(null);
-        List<String> fixedExtensions = new ArrayList<>(Arrays.asList("bat", "cmd", "com", "cpl", "exe", "scr", "js"));
-        String ext1 = "extension1", ext2 = "extension2";
+        String ext1 = "extension1", ext2 = "extension2", fixedExt = "bat";
+        filterRepository.save(ExtensionFilter.builder().isFixed(true).isActivate(true).extension(fixedExt).build());
 
         // when
         filterService.addExtensionFilter(ext1);
         filterService.addExtensionFilter(ext2);
 
         //then
-        List<String> fixedExts = filterService.getFixedExtensions();
+        List<ExtensionWithStateDto> fixedExts = filterService.getFixedExtensions();
         List<String> customExts = filterService.getCustomExtensions();
 
-        assertThat(fixedExts.size()).isEqualTo(fixedExtensions.size());
+        assertThat(fixedExts.size()).isEqualTo(1);
         assertThat(customExts.size()).isEqualTo(2);
     }
 

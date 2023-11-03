@@ -60,4 +60,36 @@ public class ExtensionFilterControllerTest {
         assertThat(responseDto.getBody().getMessage()).isEqualTo("정상 처리되었습니다.");
     }
 
+    @Test
+    public void extensionFilter_수정된다() {
+
+        // given
+        String fixedExt = "bat", customExt = "extension";
+        filterRepository.save(ExtensionFilter.builder().isFixed(true).isActivate(false).extension(fixedExt).build());
+        filterRepository.save(ExtensionFilter.builder().isFixed(false).isActivate(true).extension(customExt).build());
+
+        ExtensionFilterRequestDto fixedRequestDto = ExtensionFilterRequestDto
+                .builder()
+                .extension(fixedExt)
+                .build();
+
+        ExtensionFilterRequestDto customRequesDto = ExtensionFilterRequestDto
+                .builder()
+                .extension(customExt)
+                .build();
+
+        String url = "http://localhost:"+port+"/api/assignment/filter/extension";
+        HttpEntity<ExtensionFilterRequestDto> fixedRequestEntity = new HttpEntity<>(fixedRequestDto);
+        HttpEntity<ExtensionFilterRequestDto> customRequestEntity = new HttpEntity<>(customRequesDto);
+
+        // when
+        ResponseEntity<ExtensionFilterResponseDto> fixedResponse = restTemplate.exchange(url, HttpMethod.PUT, fixedRequestEntity, ExtensionFilterResponseDto.class);
+        ResponseEntity<ExtensionFilterResponseDto> customResponse = restTemplate.exchange(url, HttpMethod.PUT, customRequestEntity, ExtensionFilterResponseDto.class);
+
+        // then
+        assertThat(fixedResponse.getBody().getFixedExtensions().size()).isEqualTo(1);
+        assertThat(customResponse.getBody().getCustomExtensions().size()).isEqualTo(0);
+
+    }
+
 }

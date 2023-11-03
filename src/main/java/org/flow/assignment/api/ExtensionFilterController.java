@@ -7,6 +7,7 @@ import org.flow.assignment.service.ExtensionFilterService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -31,6 +32,20 @@ public class ExtensionFilterController {
         } catch (UnexpectedRollbackException | DataIntegrityViolationException e) {
             message = "중복 저장된 확장자입니다.";
         }
+
+        return ExtensionFilterResponseDto.builder()
+                .fixed(filterService.getFixedExtensions())
+                .custom(filterService.getCustomExtensions())
+                .message(message)
+                .build();
+    }
+
+    @PutMapping("/api/assignment/filter/extension")
+    public ExtensionFilterResponseDto updateExtensionFilter(
+            @RequestBody
+            ExtensionFilterRequestDto requestDto
+    ) {
+        String message = filterService.updateExtensionFilter(requestDto.getExtension());
 
         return ExtensionFilterResponseDto.builder()
                 .fixed(filterService.getFixedExtensions())

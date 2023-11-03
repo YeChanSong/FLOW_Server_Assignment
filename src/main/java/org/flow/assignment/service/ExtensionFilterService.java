@@ -32,4 +32,16 @@ public class ExtensionFilterService {
         return filterRepository.findAllExtensionsByIsFixedExtensionAndIsActivateOrderById(false, true).stream().map(ExtensionFilter::getExtension).collect(Collectors.toList());
     }
 
+    @Transactional
+    public String updateExtensionFilter(String extension) {
+        ExtensionFilter existFilter = filterRepository.findByExtension(extension);
+        if (existFilter == null) return "확장자가 존재하지 않습니다.";
+        if (existFilter.getIsFixedExtension()) {
+            existFilter.update(!(existFilter.getIsActivate()));
+        } else {
+            filterRepository.delete(existFilter);
+        }
+        return "정상적으로 처리되었습니다.";
+    }
+
 }
