@@ -1,17 +1,17 @@
 package org.flow.assignment.service;
 
 import org.flow.assignment.configuration.InitDataSetting;
+import org.flow.assignment.dto.ExtensionWithStateDto;
 import org.flow.assignment.entity.ExtensionFilter;
 import org.flow.assignment.repository.ExtensionFilterRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.UnexpectedRollbackException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,7 +25,7 @@ public class ExtensionFilterServiceTest {
     @Autowired
     ExtensionFilterRepository filterRepository;
 
-    @Autowired
+    @MockBean
     InitDataSetting initSetting;
 
     @AfterEach
