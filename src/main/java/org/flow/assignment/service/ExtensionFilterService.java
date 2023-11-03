@@ -1,12 +1,12 @@
 package org.flow.assignment.service;
 
 import lombok.RequiredArgsConstructor;
+import org.flow.assignment.dto.ExtensionWithStateDto;
 import org.flow.assignment.entity.ExtensionFilter;
 import org.flow.assignment.repository.ExtensionFilterRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,17 +18,18 @@ public class ExtensionFilterService {
 
     @Transactional
     public void addExtensionFilter(String extension) {
-        filterRepository.addExtFilterByisFixedExtensionAndExtensionAndCreatedAt(true, extension, LocalDateTime.now());
+        filterRepository.save(ExtensionFilter.builder().isFixed(false).isActivate(true).extension(extension).build());
     }
 
     @Transactional
-    public List<String> getFixedExtensions() {
-        return filterRepository.findAllExtensionsByIsFixedExtensionOrderById(true).stream().map(ExtensionFilter::getExtension).collect(Collectors.toList());
+    public List<ExtensionWithStateDto> getFixedExtensions() {
+
+        return filterRepository.findAllExtensionsByIsFixedExtensionAndIsActivateOrderById(true, true).stream().map(ExtensionFilter::toExtensionWithState).collect(Collectors.toList());
     }
 
     @Transactional
     public List<String> getCustomExtensions() {
-        return filterRepository.findAllExtensionsByIsFixedExtensionOrderById(false).stream().map(ExtensionFilter::getExtension).collect(Collectors.toList());
+        return filterRepository.findAllExtensionsByIsFixedExtensionAndIsActivateOrderById(false, true).stream().map(ExtensionFilter::getExtension).collect(Collectors.toList());
     }
 
 }
