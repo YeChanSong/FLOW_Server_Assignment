@@ -27,6 +27,9 @@ public class ExtensionFilterController {
         String message = "정상 처리되었습니다.";
         try {
             if (requestDto.getExtension().isEmpty()) message = "확장자를 입력해 주세요.";
+            else if (requestDto.getExtension().length() > 20) {
+                message = "확장자의 길이는 20자 이하만 가능합니다.";
+            }
             else if (!filterService.addExtensionFilter(requestDto.getExtension())) {
                 message = "커스텀 확장자의 수가 200을 넘었습니다.";
             }

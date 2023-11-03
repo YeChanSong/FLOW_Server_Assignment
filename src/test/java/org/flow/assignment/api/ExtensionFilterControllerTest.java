@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -119,6 +120,43 @@ public class ExtensionFilterControllerTest {
         // then
         assertThat(customResponse.getBody().getCustomExtensions().size()).isEqualTo(200);
         assertThat(customResponse.getBody().getMessage()).isEqualTo("커스텀 확장자의 수가 200을 넘었습니다.");
+    }
+
+    @Test
+    public void extension의_길이는_20을_넘지_않는다() {
+
+        // given
+        String ext20 = "asdfasdfasdfasdfasdf";
+        String ext21 = "asdfasdfasdfasdfasdfa";
+
+        ExtensionFilterRequestDto ext20RequesDto = ExtensionFilterRequestDto
+                .builder()
+                .extension(ext20)
+                .build();
+
+        ExtensionFilterRequestDto ext21RequesDto = ExtensionFilterRequestDto
+                .builder()
+                .extension(ext21)
+                .build();
+
+        String url = "http://localhost:"+port+"/api/assignment/filter/extension";
+
+        // when
+        ResponseEntity<ExtensionFilterResponseDto> ext20Response = restTemplate.postForEntity(url, ext20RequesDto, ExtensionFilterResponseDto.class);
+
+        // then
+        assertThat(ext20Response.getBody().getMessage()).isEqualTo("정상 처리되었습니다.");
+
+        ExtensionFilter extension = filterRepository.findByExtension(ext20);
+        assertThat(extension.getExtension()).isEqualTo(ext20);
+
+        // when
+        ResponseEntity<ExtensionFilterResponseDto> ext21Response = restTemplate.postForEntity(url, ext21RequesDto, ExtensionFilterResponseDto.class);
+
+        // then
+        assertThat(ext21Response.getBody().getMessage()).isEqualTo("확장자의 길이는 20자 이하만 가능합니다.");
+        List<ExtensionFilter> extensions = filterRepository.findAllExtensionsByIsFixedExtensionAndIsActivateOrderById(false, true);
+        assertThat(extensions.size()).isEqualTo(1);
     }
 
 }
