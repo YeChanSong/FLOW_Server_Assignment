@@ -1,16 +1,22 @@
 package org.flow.assignment.repository;
 
+import org.flow.assignment.configuration.InitDataSetting;
 import org.flow.assignment.entity.ExtensionFilter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -22,8 +28,13 @@ public class ExtensionFilterRepositoryTest {
     @AfterEach
     public void tearDown() { filterRepository.deleteAll(); }
 
+    @MockBean
+    private InitDataSetting initSetting;
+
     @Test
     public void ExtensionFilter가_저장된다() {
+        // applicationRunner block
+        doNothing().when(initSetting).run(any());
 
         //given
         Boolean isFixed = true;
@@ -35,12 +46,14 @@ public class ExtensionFilterRepositoryTest {
 
         filterRepository.save(ExtensionFilter.builder()
                 .isFixed(isFixed)
+                .isActivate(true)
                 .extension(fixedExt)
                 .build());
 
         filterRepository.save(ExtensionFilter.builder()
                 .isFixed(isNotFixed)
                 .extension(customExt)
+                .isActivate(true)
                 .build());
 
         // when
@@ -49,15 +62,18 @@ public class ExtensionFilterRepositoryTest {
         // then
         ExtensionFilter fixed = saveResults.get(0);
         assertThat(fixed.getIsFixedExtension()).isEqualTo(isFixed);
+        assertThat(fixed.getIsActivate()).isEqualTo(true);
         assertThat(fixed.getExtension()).isEqualTo(fixedExt);
         assertThat(fixed.getCreatedAt()).isAfter(genTime);
 
         ExtensionFilter custom = saveResults.get(1);
         assertThat(custom.getIsFixedExtension()).isEqualTo(isNotFixed);
+        assertThat(custom.getIsActivate()).isEqualTo(true);
         assertThat(custom.getExtension()).isEqualTo(customExt);
         assertThat(custom.getCreatedAt()).isAfter(genTime);
 
     }
+
 
     
 }
