@@ -17,7 +17,7 @@ public class ExtensionFilterService {
     private final ExtensionFilterRepository filterRepository;
 
     @Transactional
-    public void addExtensionFilterSuccess(String extension) {
+    public void addExtensionFilter(String extension) {
         filterRepository.addExtFilterByisFixedExtensionAndExtensionAndCreatedAt(true, extension, LocalDateTime.now());
     }
 
