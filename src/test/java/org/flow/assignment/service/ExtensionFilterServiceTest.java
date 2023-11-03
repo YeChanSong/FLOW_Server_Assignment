@@ -36,7 +36,7 @@ public class ExtensionFilterServiceTest {
         String ext = "extension";
 
         // when
-        filterService.addExtensionFilterSuccess(ext);
+        filterService.addExtensionFilter(ext);
 
         // then
         List<ExtensionFilter> searchedFilters = filterRepository.findAllByExtensionOrderById(ext);
@@ -50,10 +50,10 @@ public class ExtensionFilterServiceTest {
         String ext = "extension";
 
         //when
-        filterService.addExtensionFilterSuccess(ext);
+        filterService.addExtensionFilter(ext);
 
         try {
-            filterService.addExtensionFilterSuccess(ext);
+            filterService.addExtensionFilter(ext);
         } catch (DataIntegrityViolationException | UnexpectedRollbackException e) {
             // do nothing
             System.out.println(">>>>>>>> "+e.getClass().getName());
@@ -72,8 +72,8 @@ public class ExtensionFilterServiceTest {
         String ext1 = "extension1", ext2 = "extension2";
 
         // when
-        filterService.addExtensionFilterSuccess(ext1);
-        filterService.addExtensionFilterSuccess(ext2);
+        filterService.addExtensionFilter(ext1);
+        filterService.addExtensionFilter(ext2);
 
         //then
         List<String> fixedExts = filterService.getFixedExtensions();
