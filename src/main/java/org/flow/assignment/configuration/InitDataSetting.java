@@ -19,9 +19,12 @@ public class InitDataSetting implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         List<String> fixedExtensions = new ArrayList<>(Arrays.asList("bat", "cmd", "com", "cpl", "exe", "scr", "js"));
-        List<ExtensionFilter> fixedExtFilters = new ArrayList<>();
-        fixedExtensions.forEach( ext -> fixedExtFilters.add(new ExtensionFilter(true, false, ext)));
-        filterRepository.saveAll(fixedExtFilters);
+        ExtensionFilter existFixedExt = filterRepository.findByExtension("bat");
+        if (existFixedExt == null) {
+            List<ExtensionFilter> fixedExtFilters = new ArrayList<>();
+            fixedExtensions.forEach( ext -> fixedExtFilters.add(new ExtensionFilter(true, false, ext)));
+            filterRepository.saveAll(fixedExtFilters);
+        }
     }
 
 }
