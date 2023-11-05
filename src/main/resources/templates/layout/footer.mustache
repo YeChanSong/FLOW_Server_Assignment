@@ -4,5 +4,39 @@
 
 
 
+<script>
+
+     $(document).ready(function() {
+         $("#btn-addCustomExt").click(function() {
+             var inputText = $("#input-custom-ext").val();
+             if (inputText !== "") {
+                   $.ajax({
+                        url: '/api/assignment/filter/extension',
+                        type: 'POST',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify({ extension: inputText }),
+                        dataType: 'json',
+                        async: false,
+                        success: function(response) {
+                            if (response.message == "정상 처리되었습니다.") {
+                                alert(response.message);
+                                window.location.reload();
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function(error) {
+                            alert("항목 추가에 실패했습니다.");
+                        }
+                   });
+             }
+         });
+
+
+
+
+     });
+</script>
+
 </body>
 </html>

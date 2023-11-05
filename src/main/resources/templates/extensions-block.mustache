@@ -1,0 +1,47 @@
+{{>layout/header}}
+
+<div class="col-md-12">
+    <hr style="border: 1px solid">
+    <div class="col-md-12">
+        <h2> ◎ 파일 확장자 차단</h2>
+    </div>
+    <hr style="width: 98%; border: 1.5px solid">
+    <div class="col-md-4">
+        <h5 style="font-weight: normal; width: 100%">파일 확장자에 따라 특정 형식의 파일을 첨부하거나 전송하지 못하도록 제한</h5>
+    </div>
+</div>
+<br>
+<div class="col-md-12">
+    <div class="col-md-4">
+        <label class="label" style="margin-right: 5%">고정 확장자</label>
+        {{#filterList.fixedExtensions}}
+            <input type="checkbox" id="{{extension}}_input" {{#isActivate}}checked{{/isActivate}}> <label for="{{extension}}_input" style="margin-right: 5%">{{extension}}</label>
+        {{/filterList.fixedExtensions}}
+    </div>
+</div>
+
+<br>
+
+<div class="col-md-12">
+    <div class="col-md-4">
+        <label class="label" style="margin-right: 3%">커스텀 확장자</label>
+        <form>
+            <input type="text" id="input-custom-ext" style="width: 100%" placeholder="확장자 입력">
+        </form>
+        <button type="button" class="btn btn-secondary" style="height: 1.5; line-height: 0.5" id="btn-addCustomExt">+추가</button>
+    </div>
+    <div class="col-md-4">
+        <div class="container mt-5" id="custom-filter-container">
+            {{#filterList.customExtensions}}
+                <div class="item-box" id="{{.}}_box">
+                    <span class="data" style="margin-right: 2px">{{.}}</span>
+                    <span class="delete-button">X</span>
+                </div>
+            {{/filterList.customExtensions}}
+        </div>
+    </div>
+</div>
+
+
+
+{{>layout/footer}}
