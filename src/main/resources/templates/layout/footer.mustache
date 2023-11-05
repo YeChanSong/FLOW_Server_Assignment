@@ -36,7 +36,7 @@
          // 고정 확장자에 대해서 PUT 요청 보내도록 추가
          $('input[type="checkbox"]').on('change', function() {
                 let extValue = $(this).attr('id').split('_input')[0];
-                console.log("extValue",extValue);
+
                 $.ajax({
                     url: '/api/assignment/filter/extension',
                     type: 'PUT',
@@ -55,7 +55,27 @@
          });
 
 
+         // X 버튼 클릭 시
 
+         $('.delete-button').on('click', function() {
+            let extValue = $(this).siblings('.data').text(); // .data 요소의 텍스트 값을 가져옵니다
+
+            $.ajax({
+                url: '/api/assignment/filter/extension',
+                type: 'PUT',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({ extension: extValue }),
+                dataType: 'json',
+                async: false,
+                success: function(response) {
+                    alert(response.message);
+                    window.location.reload();
+                },
+                error: function(error) {
+                    alert("항목 삭제에 실패했습니다.");
+                }
+            });
+         });
          
 
      });
