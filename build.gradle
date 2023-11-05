@@ -39,6 +39,8 @@ dependencies {
     // mustache
     implementation('org.springframework.boot:spring-boot-starter-mustache')
 
+    // mysql
+    implementation('mysql:mysql-connector-java:8.0.33')
 }
 
 test {
