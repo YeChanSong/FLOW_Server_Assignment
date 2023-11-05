@@ -14,6 +14,8 @@ public interface ExtensionFilterRepository extends JpaRepository<ExtensionFilter
 
     List<ExtensionFilter> findAllExtensionsByIsFixedExtensionAndIsActivateOrderById(Boolean isFixedExtension, Boolean isActivate);
 
+    List<ExtensionFilter> findAllByIsFixedExtension(Boolean isFixedExtension);
+
     List<ExtensionFilter> findAllByExtensionOrderById(String extension);
     ExtensionFilter findByExtension(String extension);
 }

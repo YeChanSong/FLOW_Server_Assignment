@@ -1,0 +1,171 @@
+<!DOCTYPE HTML>
+<head>
+    <title>FLOW_Server_Assignment</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <style>
+        .container {
+            display: flex;
+        }
+
+        .label {
+            margin-right: 4px;
+        }
+
+        .input-row {
+
+        }
+
+        .input-row input {
+
+        }
+
+        .item-box {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 5px;
+            margin: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .data {
+            flex-grow: 1;
+        }
+        .delete-button {
+            cursor: pointer;
+            color: black;
+        }
+    </style>
+
+</head>
+<body>
+
+
+    <div class="col-md-12">
+        <hr style="border: 1px solid">
+        <div class="col-md-12">
+            <h2> ◎ 파일 확장자 차단</h2>
+        </div>
+        <hr style="width: 98%; border: 1.5px solid">
+        <div class="col-md-4">
+            <h5 style="font-weight: normal; width: 120%">파일 확장자에 따라 특정 형식의 파일을 첨부하거나 전송하지 못하도록 제한</h5>
+        </div>
+    </div>
+    <br>
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <label class="label" style="margin-right: 5%">고정 확장자</label>
+            {{#filterList.fixedExtensions}}
+                <input type="checkbox" id="{{extension}}_input" {{#isActivate}}checked{{/isActivate}}> <label for="{{extension}}_input" style="margin-right: 5%">{{extension}}</label>
+            {{/filterList.fixedExtensions}}
+        </div>
+    </div>
+
+    <br>
+
+    <div class="col-md-12">
+        <div class="col-md-4">
+            <form class="d-flex align-items-center">
+                <label class="label" style="margin-right: 5%">커스텀 확장자</label>
+                <input type="text" id="input-custom-ext" style="width: 60%; margin-right: 3%" placeholder="확장자 입력">
+                <button type="button" class="btn btn-secondary" style="height: 1.5; line-height: 0.5" id="btn-addCustomExt">+추가</button>
+            </form>
+        </div>
+        <div class="col-md-4">
+            <div class="col-md-4" style="padding-bottom: 1px">
+                <p class="mb-0 p-2">{{filterList.customExtsLength}} / 200</p>
+            </div>
+            <div class="container mt-2" id="custom-filter-container">
+                {{#filterList.customExtensions}}
+                    <div class="item-box" id="{{.}}_box">
+                        <span class="data" style="margin-right: 2px">{{.}}</span>
+                        <span class="delete-button">X</span>
+                    </div>
+                {{/filterList.customExtensions}}
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+
+
+
+        $(document).ready(function() {
+            $("#btn-addCustomExt").click(function() {
+                var inputText = $("#input-custom-ext").val();
+                if (inputText !== "") {
+                      $.ajax({
+                           url: '/api/assignment/filter/extension',
+                           type: 'POST',
+                           contentType: 'application/json; charset=utf-8',
+                           data: JSON.stringify({ extension: inputText }),
+                           dataType: 'json',
+                           async: false,
+                           success: function(response) {
+                               if (response.message == "정상 처리되었습니다.") {
+                                   alert(response.message);
+                                   window.location.reload();
+                               } else {
+                                   alert(response.message);
+                               }
+                           },
+                           error: function(error) {
+                               alert("항목 추가에 실패했습니다.");
+                           }
+                      });
+                }
+            });
+
+
+            // 고정 확장자에 대해서 PUT 요청 보내도록 추가
+            $('input[type="checkbox"]').on('change', function() {
+                   let extValue = $(this).attr('id').split('_input')[0];
+
+                   $.ajax({
+                       url: '/api/assignment/filter/extension',
+                       type: 'PUT',
+                       contentType: 'application/json; charset=utf-8',
+                       data: JSON.stringify({ extension: extValue }),
+                       dataType: 'json',
+                       async: false,
+                       success: function(response) {
+                           alert(response.message);
+                           window.location.reload();
+                       },
+                       error: function(error) {
+                           alert("항목 수정에 실패했습니다.");
+                       }
+                   });
+            });
+
+
+            // X 버튼 클릭 시
+            $('.delete-button').on('click', function() {
+               let extValue = $(this).siblings('.data').text(); // .data 요소의 텍스트 값을 가져옵니다
+
+               $.ajax({
+                   url: '/api/assignment/filter/extension',
+                   type: 'PUT',
+                   contentType: 'application/json; charset=utf-8',
+                   data: JSON.stringify({ extension: extValue }),
+                   dataType: 'json',
+                   async: false,
+                   success: function(response) {
+                       alert(response.message);
+                       window.location.reload();
+                   },
+                   error: function(error) {
+                       alert("항목 삭제에 실패했습니다.");
+                   }
+               });
+            });
+        });
+    </script>
+
+</body>
+</html>
