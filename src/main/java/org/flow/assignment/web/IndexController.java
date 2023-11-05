@@ -21,6 +21,16 @@ public class IndexController {
         return "index";
     }
 
+    @GetMapping("/extensions/block")
+    public String extensionBlockPage(Model model) {
+        ExtensionFilterResponseDto extFilters = ExtensionFilterResponseDto.builder()
+                .fixed(filterService.getFixedExtensions())
+                .custom(filterService.getCustomExtensions())
+                .message("")
+                .build();
+        model.addAttribute("filterList", extFilters);
+        return "extensions-block";
+    }
 
 
 }
