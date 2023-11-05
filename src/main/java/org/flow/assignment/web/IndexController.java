@@ -1,8 +1,7 @@
 package org.flow.assignment.web;
 
 import lombok.RequiredArgsConstructor;
-import org.flow.assignment.dto.ExtensionFilterResponseDto;
-import org.flow.assignment.dto.ExtensionWithStateDto;
+import org.flow.assignment.dto.ExtensionFilterPageResponseDto;
 import org.flow.assignment.service.ExtensionFilterService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +22,7 @@ public class IndexController {
 
     @GetMapping("/extensions/block")
     public String extensionBlockPage(Model model) {
-        ExtensionFilterResponseDto extFilters = ExtensionFilterResponseDto.builder()
+        ExtensionFilterPageResponseDto extFilters = ExtensionFilterPageResponseDto.builder()
                 .fixed(filterService.getFixedExtensions())
                 .custom(filterService.getCustomExtensions())
                 .message("")
