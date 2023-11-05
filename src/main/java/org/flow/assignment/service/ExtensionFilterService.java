@@ -19,7 +19,7 @@ public class ExtensionFilterService {
     @Transactional
     public boolean addExtensionFilter(String extension) {
         boolean isAddSuccess = false;
-        List<ExtensionFilter> customFilters = filterRepository.findAllExtensionsByIsFixedExtensionAndIsActivateOrderById(false, true);
+        List<ExtensionFilter> customFilters = filterRepository.findAllByIsFixedExtension(false);
         if (customFilters.size() < 200) {
             filterRepository.save(ExtensionFilter.builder().isFixed(false).isActivate(true).extension(extension).build());
             isAddSuccess = true;
@@ -30,12 +30,12 @@ public class ExtensionFilterService {
     @Transactional
     public List<ExtensionWithStateDto> getFixedExtensions() {
 
-        return filterRepository.findAllExtensionsByIsFixedExtensionAndIsActivateOrderById(true, true).stream().map(ExtensionFilter::toExtensionWithState).collect(Collectors.toList());
+        return filterRepository.findAllByIsFixedExtension(true).stream().map(ExtensionFilter::toExtensionWithState).collect(Collectors.toList());
     }
 
     @Transactional
     public List<String> getCustomExtensions() {
-        return filterRepository.findAllExtensionsByIsFixedExtensionAndIsActivateOrderById(false, true).stream().map(ExtensionFilter::getExtension).collect(Collectors.toList());
+        return filterRepository.findAllByIsFixedExtension(false).stream().map(ExtensionFilter::getExtension).collect(Collectors.toList());
     }
 
     @Transactional
