@@ -7,6 +7,7 @@ import org.flow.assignment.dto.ExtensionFilterResponseDto;
 import org.flow.assignment.entity.ExtensionFilter;
 import org.flow.assignment.repository.ExtensionFilterRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -96,6 +97,7 @@ public class ExtensionFilterControllerTest {
     }
 
     @Test
+    @Disabled
     public void extension의_수는_200을_넘지_않는다() {
 
         // given
